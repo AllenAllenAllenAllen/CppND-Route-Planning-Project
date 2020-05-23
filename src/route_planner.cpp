@@ -10,8 +10,8 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
     // TODO 2: Use the m_Model.FindClosestNode method to find the closest nodes to the starting and ending coordinates.
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
-    start_node = &(m_Model.FindClosestNode(start_x, start_y));
-    end_node = &(m_Model.FindClosestNode(end_x, end_y));
+    start_node = m_Model.FindClosestNode(start_x, start_y);
+    end_node = m_Model.FindClosestNode(end_x, end_y);
 }
 
 
@@ -34,12 +34,12 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     current_node->FindNeighbors();
-    for (auto p_nei : current_node->neighbors) {
-        p_nei->parent = current_node;
-        p_nei->g_value = current_node->g_value + current_node->distance(*p_nei);
-        p_nei->h_value = CalculateHValue(p_nei);
-        p_nei->visited = true;
-        open_list.push_back(p_nei);
+    for (auto nei : current_node->neighbors) {
+        nei->parent = current_node;
+        nei->g_value = current_node->g_value + current_node->distance(*nei);
+        nei->h_value = CalculateHValue(nei);
+        nei->visited = true;
+        open_list.push_back(nei);
     }
 }
 
@@ -52,8 +52,8 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Return the pointer.
 
 RouteModel::Node *RoutePlanner::NextNode() {
-    std::sort(open_list.begin(), open_list.end(), [](const auto &p_node_1, const auto &p_node_2) {
-        return p_node_1->g_value + p_node_1->h_value > p_node_2->g_value + p_node_2->h_value;
+    std::sort(open_list.begin(), open_list.end(), [](const auto &node_1, const auto &node_2) {
+        return node_1->g_value + node_1->h_value > node_2->g_value + node_2->h_value;
     });
     RouteModel::Node *next_node = open_list.back();
     open_list.pop_back();
@@ -102,6 +102,7 @@ void RoutePlanner::AStarSearch() {
 
     // TODO: Implement your solution here.
     current_node = start_node;
+    current_node->visited = true;
     open_list.push_back(current_node);
     while (open_list.size() != 0) {
         RouteModel::Node *current_node = NextNode();
