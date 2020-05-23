@@ -57,13 +57,13 @@ int main(int argc, const char **argv)
     // RoutePlanner object below in place of 10, 10, 90, 90.
     float start_x, start_y, end_x , end_y;
     std::cout << "Please enter starting x: ";
-    std:cin >> start_x;
+    std::cin >> start_x;
     std::cout << "Please enter starting y: ";
-    std:cin >> start_y;
+    std::cin >> start_y;
     std::cout << "Please enter ending x: ";
-    std:cin >> end_x;
+    std:::cin >> end_x;
     std::cout << "Please enter ending y: ";
-    std:cin >> end_y;
+    std:::cin >> end_y;
 
     // Build Model.
     RouteModel model{osm_data};
